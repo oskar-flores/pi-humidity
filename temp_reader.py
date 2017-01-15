@@ -2,14 +2,13 @@ import statsd
 import os
 import psutil
 import RPi.GPIO as GPIO
+import Adafruit_DHT as dht
 
 
 host = os.uname()[1]
 cpu = psutil.cpu_percent(interval=1)
 
 client = statsd.StatsClient('statsd', 8125, host)
-
-client.gauge('cpu.percent', cpu)
 
 
 def setup_pin_40():
@@ -18,9 +17,20 @@ def setup_pin_40():
     GPIO.output(40, GPIO.HIGH)
 
 
-def send_humidity(stadsclient, humidity):
+def log_humidity(stadsclient, humidity):
     stadsclient.gauge('lonja.humidity', humidity)
 
 
-def send_temperature(stadsclient, temperature):
-    stadsclient.gauge('lonja.temperature',temperature)
+def log_temperature(stadsclient, temperature):
+    stadsclient.gauge('lonja.temperature', temperature)
+
+
+def log_cpu(stadsclient, cpu):
+    stadsclient.gauge('cpu.percent', cpu)
+
+
+def read_sensor():
+    h, t = dht.read_retry(dht.DHT22, 20)
+
+
+log_cpu(client, cpu)
