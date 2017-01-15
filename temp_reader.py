@@ -35,10 +35,12 @@ def read_sensor():
 
 setup_pin_40()
 
-log_cpu(client, cpu)
+while True:
 
-humidity, temperature = read_sensor()
+    log_cpu(client, cpu)
 
-print humidity
+    humidity, temperature = read_sensor()
 
-print temperature
+    log_humidity(client, humidity)
+
+    log_temperature(client, temperature)
