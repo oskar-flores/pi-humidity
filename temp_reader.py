@@ -12,7 +12,7 @@ client = statsd.StatsClient('statsd', 8125, host)
 
 
 def setup_pin_40():
-    GPIO.setmode(GPIO.board)
+    GPIO.setmode(GPIO.BOARD)
     GPIO.setup(40, GPIO.OUT)
     GPIO.output(40, GPIO.HIGH)
 
@@ -31,6 +31,14 @@ def log_cpu(stadsclient, cpu):
 
 def read_sensor():
     h, t = dht.read_retry(dht.DHT22, 20)
+    return h, t
 
+setup_pin_40()
 
 log_cpu(client, cpu)
+
+humidity, temperature = read_sensor()
+
+print humidity
+
+print temperature
